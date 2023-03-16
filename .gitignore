@@ -1,0 +1,3 @@
+node_modules
+git remote add origin https://saulaznarez@dev.azure.com/saulaznarez/agendador/_git/agendador
+git push -u origin --all

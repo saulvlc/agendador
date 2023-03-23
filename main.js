@@ -1,3 +1,4 @@
+
 let clientId = '3MVG9LBJLApeX_PAlM3ly65t6lr9hb3kGRcf3RGayIHLd8dh8EAX0zDhkfpIbJb.m9BGhzLbWTLoFt1qfPPQq';
 let clientSecret = '62C6A540AE04A830261E32DDC5E3462AD017FE9115F95F5455765E982099003A';
 let username = 'anebrera@sectorpublicospring20.demo';
@@ -93,11 +94,11 @@ function cambiaVendedor() {
         // Convertimos el objeto Response a un objeto JSON
         let data = response.json();
         // Devolvemos el objeto JSON
-        return data;        
+        return data;
     })
         .then(data => {
             //Envimos los datos a la función que los procesa
-            getEventVendedor(idVendedor , data);
+            getEventVendedor(idVendedor, data);
         });
 }
 
@@ -121,7 +122,7 @@ function getEventVendedor(idVendedor, data) {
             return datos;
         })
             .then(datos => {
-                if(datos.OwnerId == idVendedor){
+                if (datos.OwnerId == idVendedor) {
                     //Guardamos en un array de objetos los datos de las reservas
                     let Subject = datos.Subject;
                     let ActivityDate = datos.ActivityDate;
@@ -131,21 +132,23 @@ function getEventVendedor(idVendedor, data) {
                         ActivityDate: ActivityDate,
                         EndDate: EndDate
                     }
-                    eventos.push(evento);      
+                    eventos.push(evento);
                 }
             }).finally(() => {
-                if(eventos.length == 0){
-                    let noReservas = "No hay reservas para este vendedor";
-                    document.getElementById("proximaCita").innerHTML = noReservas;
-                }else{
-                    proximasCitas();
-                    mostrarEnCalendario();
-                }
+                // if (eventos.length == 0) {
+                //     console.log('eventos.length: ' + eventos.length);
+                //     eventos = [];
+                //     let noReservas = "No hay reservas para este vendedor";
+                //     document.getElementById("proximaCita").innerHTML = noReservas;
+                // } else {
+                proximasCitas();
+                mostrarEnCalendario();
+                // }
             });
     });
-    
-    
-    
+
+
+
 }
 
 function proximasCitas() {
@@ -163,28 +166,28 @@ function proximasCitas() {
         }
         return 0;
     });
-// Obtenemos la fecha de la proxima cita a partir de la fecha actual
+    // Obtenemos la fecha de la proxima cita a partir de la fecha actual
     let fechaActual = new Date();
     let fechaActualFormateada = fechaActual.getFullYear() + "-" + (fechaActual.getMonth() + 1) + "-" + fechaActual.getDate();
-   for(let i = 0; i < eventos.length; i++){
-            let fecha = eventos[i].ActivityDate;
-            let fechaArray = fecha.split("-");
-            let fechaFormateada = fechaArray[2] + "/" + fechaArray[1] + "/" + fechaArray[0];
+    for (let i = 0; i < eventos.length; i++) {
+        let fecha = eventos[i].ActivityDate;
+        let fechaArray = fecha.split("-");
+        let fechaFormateada = fechaArray[2] + "/" + fechaArray[1] + "/" + fechaArray[0];
 
-            if (fechaActualFormateada < fecha) {
-                proximaCita.innerHTML = "Cita reservada más proxima: " + fechaFormateada;
-            }
+        if (fechaActualFormateada < fecha) {
             proximaCita.innerHTML = "Cita reservada más proxima: " + fechaFormateada;
-   }
-    
+        }
+        proximaCita.innerHTML = "Cita reservada más proxima: " + fechaFormateada;
+    }
+
 }
 
 //     //mostrar en el calendario
-function mostrarEnCalendario(){
+function mostrarEnCalendario() {
     // Mostramos en la celda del calendario los eventos que tenemos guardado en el array de objetos
     let calendarEl = document.getElementById('calendar');
     let fechas = [];
-    for(let i = 0; i < eventos.length; i++){
+    for (let i = 0; i < eventos.length; i++) {
         let fecha = eventos[i].ActivityDate;
         let fechaArray = fecha.split("-");
         let fechaFormateada = fechaArray[2] + "/" + fechaArray[1] + "/" + fechaArray[0];
@@ -192,18 +195,37 @@ function mostrarEnCalendario(){
     }
     let calendar = new FullCalendar.Calendar(calendarEl, {});
     calendar.render();
-    for(let i = 0; i < eventos.length; i++){
-        console.log("aqui"+eventos[i]);
-        calendar.select(eventos[i], eventos[i]);
+
+
+    if (eventos.length > 0) {
+
+        for (let i = 0; i < eventos.length; i++) {
+
+            console.log("aqui" + eventos[i].ActivityDate);
+            calendar.addEvent({
+                title: window.nombreVendedor,
+                start: eventos[i].ActivityDate,
+                end: eventos[i].EndDate
+            });
+        }
+
+    } else {
+        let noReservas = "No hay reservas para este vendedor";
+        document.getElementById("proximaCita").innerHTML = noReservas;
+
+        calendar.removeAllEvents();
+        console.log("no hay eventos");
+
+
+
     }
-    
-    
+
     // let longitud = eventos.length;
-    
+
     // let calendar = new FullCalendar.Calendar(calendarEl, {
     //     initialView: 'dayGridMonth',
     //     events: 
-        
+
     //     [
     //         {
     //             title: window.nombreVendedor,
@@ -220,22 +242,17 @@ function mostrarEnCalendario(){
     //             start: eventos[2].ActivityDate,
     //             end: eventos[2].EndDate
     //             }
-              
+
     //     ]
     // });
-    // //Hacemos que cada celda del calendario se pueda hacer click para añadir una cita
-    // calendar.on('dateClick', function (info) {
-    //     console.log('Clicked on: ' + info.dateStr);
-    //     console.log('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-    //     console.log('Current view: ' + info.view.type);
-    //     // change the day's background color just for fun
-    //     info.dayEl.style.backgroundColor = 'red';
-    // });
+    //Hacemos que cada celda del calendario se pueda hacer click para añadir una cita
+    calendar.on('dateClick', function (info) {
+        console.log('Clicked on: ' + info.dateStr);
+        console.log('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+        console.log('Current view: ' + info.view.type);
+        // change the day's background color just for fun
+        info.dayEl.style.backgroundColor = 'red';
+    });
 
     // calendar.render();
 }
-
-
-//git remote add origin https://saulaznarez@dev.azure.com/saulaznarez/agendador/_git/agendador
-//git push -u origin --all
-//C:\Users\saznarez\AppData\Local\Programs\Git

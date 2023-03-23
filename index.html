@@ -9,8 +9,11 @@
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/index.global.min.js'></script>
     <script src="blocksdk.js"></script>
     <script src="main.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@100&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="estilo.css">
-    <title>Document</title>
+<title>Document</title>
 </head>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -20,25 +23,31 @@
         });
         calendar.render();
     });
-
 </script>
 
 <body>
-    <div class="row">
-        <div class="col1">
-            <div class="titulo">
-                <h1>Agendador de citas</h1>
+    <div class="seleccionable">
+        <div class="titulo">
+            <h1>Agendador de citas</h1>
+        </div>
+        <hr class="divisor">
+
+        <div class="prueba">
+            <div class="select">
+                <select id="vendedor" class="vendedor" onchange="cambiaVendedor()">
+                    <option value="0">Seleccione un vendedor</option>
+                </select>
             </div>
 
-            <select id="vendedor" class="vendedor" onchange="cambiaVendedor()">
-                <option value="0">Seleccione un vendedor</option>
-            </select>
-            <h2 id="proximaCita">
-
-            </h2>
-            <span id="horas"></span>
-
+            <div class="cita-content">
+                <h2 id="proximaCita"></h2>
+                <span id="horas"></span>
+            </div>
         </div>
+
+
+    </div>
+    <div class="calendar-content">
         <div class="col2">
             <div id='calendar'></div>
         </div>

@@ -11,7 +11,7 @@ var SDK = function (whitelistOverride, sslOverride) {
 	// the marketing cloud
 	this._validateOrigin = function (origin) {
 		// Make sure to escape periods since these strings are used in a regular expression
-		var allowedDomains = whitelistOverride || ['marketingcloudapps\\.com', 'blocktester\\.herokuapp\\.com'];
+		var allowedDomains = whitelistOverride || ['marketingcloudapps\\.com', 'agendadorcitas\\.onrender\\.com'];
 		for (var i = 0; i < allowedDomains.length; i++) {
 			// Makes the s optional in https
 			var optionalSsl = sslOverride ? '?' : '';

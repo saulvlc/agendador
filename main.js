@@ -5,6 +5,8 @@ let username = 'anebrera@sectorpublicospring20.demo';
 let password = 'Salesforce1234';
 let url = 'https://login.salesforce.com/services/oauth2/token';
 let eventos = new Array();
+let WhoId = "0016g00002KSE4PAAX";
+let Name = "Remedios García Rodríguez";
 
 // Hacemos la llamada  para obtener el token de acceson y ponemos "Accept": "application/json","Access-Control-Allow-Origin": "*","Access-Control-Allow-Methods": "*"
 try {
@@ -43,7 +45,6 @@ function getAccounts() {
             'Authorization': 'Bearer ' + window.token
         }
     }).then(response => {
-        console.log(response);
         return response.json();
     }
     ).then(data => {
@@ -135,15 +136,8 @@ function getEventVendedor(idVendedor, data) {
                     eventos.push(evento);
                 }
             }).finally(() => {
-                // if (eventos.length == 0) {
-                //     console.log('eventos.length: ' + eventos.length);
-                //     eventos = [];
-                //     let noReservas = "No hay reservas para este vendedor";
-                //     document.getElementById("proximaCita").innerHTML = noReservas;
-                // } else {
                 proximasCitas();
                 mostrarEnCalendario();
-                // }
             });
     });
 
@@ -201,7 +195,6 @@ function mostrarEnCalendario() {
 
         for (let i = 0; i < eventos.length; i++) {
 
-            console.log("aqui" + eventos[i].ActivityDate);
             calendar.addEvent({
                 title: window.nombreVendedor,
                 start: eventos[i].ActivityDate,
@@ -220,39 +213,61 @@ function mostrarEnCalendario() {
 
     }
 
-    // let longitud = eventos.length;
-
-    // let calendar = new FullCalendar.Calendar(calendarEl, {
-    //     initialView: 'dayGridMonth',
-    //     events: 
-
-    //     [
-    //         {
-    //             title: window.nombreVendedor,
-    //             start: eventos[0].ActivityDate,
-    //             end: eventos[0].EndDate
-    //        },
-    //           {
-    //             title: window.nombreVendedor,
-    //             start: eventos[1].ActivityDate,
-    //             end: eventos[1].EndDate
-    //           },
-    //             {
-    //             title: window.nombreVendedor,
-    //             start: eventos[2].ActivityDate,
-    //             end: eventos[2].EndDate
-    //             }
-
-    //     ]
-    // });
     //Hacemos que cada celda del calendario se pueda hacer click para añadir una cita
     calendar.on('dateClick', function (info) {
         console.log('Clicked on: ' + info.dateStr);
-        console.log('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-        console.log('Current view: ' + info.view.type);
-        // change the day's background color just for fun
-        info.dayEl.style.backgroundColor = 'red';
+        //Llamamos a la función para hacer la llamada y reservar la cita
+        reservarCita(info, info.dateStr);        
     });
 
     // calendar.render();
+}
+
+//función para reservar la cita
+function reservarCita(info, fecha) {
+    // Comproque que el vendedor no tenga una cita en esa fecha y que el dia seleccionado no sea anterior a la fecha actual
+    let fechaActual = new Date(); 
+    if (eventos.length > 0) {
+        for (let i = 0; i < eventos.length; i++) {
+            if (eventos[i].ActivityDate == fecha) {
+                alert("El vendedor ya tiene una cita reservada en esa fecha");
+                return;
+            }
+        }
+    }
+    if (fechaActual > info.date) {
+        alert("No puede reservar una cita en una fecha anterior a la actual");
+        return;
+    }
+    // Ponemos este formato de fecha 2023-03-23T17:00:00.000+0000
+    fecha = fecha + "T17:00:00.000+0000";
+    let idVendedor = document.getElementById("vendedor").value;
+    //Hacemos la llamada para reservar la cita por el metodo post que envia un raw json
+    httprequest = new XMLHttpRequest();
+    httprequest.open("POST", window.instanceUrl + '/services/data/v57.0/sobjects/Event', true);
+    httprequest.setRequestHeader("Authorization", "Bearer " + window.token);
+    httprequest.setRequestHeader("Content-Type", "application/json");
+    httprequest.send(JSON.stringify({
+        "Subject": "Cita con " + Name,
+        "OwnerId": idVendedor,
+        "WhoId": window.idCliente,
+        "Location": "Madrid",
+        "WhatId": WhoId,
+        "StartDateTime": fecha,
+        "EndDateTime": fecha,
+        "IsAllDayEvent": true,
+        "Description": "Creado desde Api"
+    }));
+    httprequest.onreadystatechange = function () {
+        if (httprequest.readyState == 4) {
+            if (httprequest.status == 201) {
+                console.log("Cita reservada");
+                //Hacemos la llamada para obtener los eventos
+                console.log(httprequest.responseText);
+                info.dayEl.style.backgroundColor = 'blue'
+            } else {
+                console.log("Error al reservar la cita");
+            }
+        }
+    }
 }

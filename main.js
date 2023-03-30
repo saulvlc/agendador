@@ -7,9 +7,10 @@ let url = 'https://login.salesforce.com/services/oauth2/token';
 let eventos = new Array();
 let WhoId = "0016g00002KSE4PAAX";
 let Name = "Remedios García Rodríguez";
+setCookie("consentimiento", "false", 365);
 
 //Cuando se inicie la pagina y no tenga la cookie de consentimiento, se mostrará el mensaje de consentimiento
-if (!getCookie("consentimiento")) {
+if (getCookie("consentimiento") == "false") {
     //Creamos un confirm para aceptar el consentimiento de la política de privacidad y cookies de Salesforce.
     Swal.fire({
         title: 'Política de privacidad y cookies',
@@ -23,7 +24,7 @@ if (!getCookie("consentimiento")) {
     }).then((result) => {
         if (result.isConfirmed) {
             console.log("Acepta la política de privacidad y cookies");
-            //Creamos la cookie de consentimiento
+            //Modificamo la cookie de consentimiento a true
             setCookie("consentimiento", "true", 365);
         }else {
             console.log("No acepta la política de privacidad y cookies");

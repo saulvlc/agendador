@@ -8,6 +8,26 @@ let eventos = new Array();
 let WhoId = "0016g00002KSE4PAAX";
 let Name = "Remedios García Rodríguez";
 
+$(document).ready(function () {
+    //Creamos un confirm para aceptar el conentimiento de la política de privacidad y cookies de Salesforce
+    Swal.fire({
+        title: 'Política de privacidad y cookies',
+        text: 'Al aceptar la política de privacidad y cookies de Salesforce, aceptas que Salesforce pueda almacenar y acceder a información en tu dispositivo, como cookies y datos de identificación, para proporcionar funciones de redes sociales, analizar el tráfico y personalizar el contenido.',
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            console.log("Acepta la política de privacidad y cookies");
+        }else {
+            console.log("No acepta la política de privacidad y cookies");
+        }
+    });
+});
+
 // Hacemos la llamada  para obtener el token de acceson y ponemos "Accept": "application/json","Access-Control-Allow-Origin": "*","Access-Control-Allow-Methods": "*"
 try {
     fetch(url, {

@@ -9,7 +9,7 @@ let WhoId = "0016g00002KSE4PAAX";
 let Name = "Remedios García Rodríguez";
 
 $(document).ready(function () {
-    //Creamos un confirm para aceptar el conentimiento de la política de privacidad y cookies de Salesforce
+    //Creamos un confirm para aceptar el consentimiento de la política de privacidad y cookies de Salesforce
     Swal.fire({
         title: 'Política de privacidad y cookies',
         text: 'Al aceptar la política de privacidad y cookies de Salesforce, aceptas que Salesforce pueda almacenar y acceder a información en tu dispositivo, como cookies y datos de identificación, para proporcionar funciones de redes sociales, analizar el tráfico y personalizar el contenido.',

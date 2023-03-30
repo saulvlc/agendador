@@ -8,8 +8,9 @@ let eventos = new Array();
 let WhoId = "0016g00002KSE4PAAX";
 let Name = "Remedios García Rodríguez";
 
-$(document).ready(function () {
-    //Creamos un confirm para aceptar el consentimiento de la política de privacidad y cookies de Salesforce
+//Cuando se inicie la pagina y no tenga la cookie de consentimiento, se mostrará el mensaje de consentimiento
+if (!getCookie("consentimiento")) {
+    //Creamos un confirm para aceptar el consentimiento de la política de privacidad y cookies de Salesforce.
     Swal.fire({
         title: 'Política de privacidad y cookies',
         text: 'Al aceptar la política de privacidad y cookies de Salesforce, aceptas que Salesforce pueda almacenar y acceder a información en tu dispositivo, como cookies y datos de identificación, para proporcionar funciones de redes sociales, analizar el tráfico y personalizar el contenido.',
@@ -22,12 +23,13 @@ $(document).ready(function () {
     }).then((result) => {
         if (result.isConfirmed) {
             console.log("Acepta la política de privacidad y cookies");
+            //Creamos la cookie de consentimiento
+            setCookie("consentimiento", "true", 365);
         }else {
             console.log("No acepta la política de privacidad y cookies");
         }
-    });
-});
-
+    })
+}
 // Hacemos la llamada  para obtener el token de acceson y ponemos "Accept": "application/json","Access-Control-Allow-Origin": "*","Access-Control-Allow-Methods": "*"
 try {
     fetch(url, {

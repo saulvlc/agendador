@@ -7,29 +7,18 @@ let url = 'https://login.salesforce.com/services/oauth2/token';
 let eventos = new Array();
 let WhoId = "0016g00002KSE4PAAX";
 let Name = "Remedios García Rodríguez";
-setCookie("consentimiento", "false", 365);
-
+//Creamos e inicialimos la cookie de consentimiento
+document.cookie = "consentimiento=false; expires=Thu, 18 Dec 2020 12:00:00 UTC; path=/";
+console.log("No tiene la cookie de consentimiento" + document.cookie.indexOf("consentimiento=false"));
 //Cuando se inicie la pagina y no tenga la cookie de consentimiento, se mostrará el mensaje de consentimiento
-if (getCookie("consentimiento") == "false") {
+if (document.cookie.indexOf("consentimiento=false") <= 0) {
+    console.log("No tiene la cookie de consentimiento");
     //Creamos un confirm para aceptar el consentimiento de la política de privacidad y cookies de Salesforce.
-    Swal.fire({
-        title: 'Política de privacidad y cookies',
-        text: 'Al aceptar la política de privacidad y cookies de Salesforce, aceptas que Salesforce pueda almacenar y acceder a información en tu dispositivo, como cookies y datos de identificación, para proporcionar funciones de redes sociales, analizar el tráfico y personalizar el contenido.',
-        icon: 'info',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Aceptar',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            console.log("Acepta la política de privacidad y cookies");
-            //Modificamo la cookie de consentimiento a true
-            setCookie("consentimiento", "true", 365);
-        }else {
-            console.log("No acepta la política de privacidad y cookies");
-        }
-    })
+    if (confirm("Al aceptar, acepta la política de privacidad y cookies de Salesforce")) {
+        //Creamos la cookie de consentimiento
+        document.cookie = "consentimiento=true; expires=Thu, 18 Dec 2020 12:00:00 UTC; path=/";
+        console.log("Se ha creado la cookie de consentimiento" + document.cookie.indexOf("consentimiento=false"));
+    }
 }
 // Hacemos la llamada  para obtener el token de acceson y ponemos "Accept": "application/json","Access-Control-Allow-Origin": "*","Access-Control-Allow-Methods": "*"
 try {

@@ -7,19 +7,28 @@ let url = 'https://login.salesforce.com/services/oauth2/token';
 let eventos = new Array();
 let WhoId = "0016g00002KSE4PAAX";
 let Name = "Remedios García Rodríguez";
+
 //Creamos e inicialimos la cookie de consentimiento
 document.cookie = "consentimiento=false; expires=Thu, 18 Dec 2020 12:00:00 UTC; path=/";
-console.log("No tiene la cookie de consentimiento" + document.cookie.indexOf("consentimiento=false"));
-//Cuando se inicie la pagina y no tenga la cookie de consentimiento, se mostrará el mensaje de consentimiento
-if (document.cookie.indexOf("consentimiento=false") <= 0) {
-    console.log("No tiene la cookie de consentimiento");
-    //Creamos un confirm para aceptar el consentimiento de la política de privacidad y cookies de Salesforce.
-    if (confirm("Al aceptar, acepta la política de privacidad y cookies de Salesforce")) {
-        //Creamos la cookie de consentimiento
-        document.cookie = "consentimiento=true; expires=Thu, 18 Dec 2020 12:00:00 UTC; path=/";
-        console.log("Se ha creado la cookie de consentimiento" + document.cookie.indexOf("consentimiento=false"));
-    }
+
+//Creamos la funcion aceptar y rechazar para los botones
+function aceptar() {
+    //Creamos la cookie de consentimiento
+    document.cookie = "consentimiento=true; expires=Thu, 18 Dec 2020 12:00:00 UTC; path=/";
+    console.log("Se ha creado la cookie de consentimiento" + document.cookie.indexOf("consentimiento=false"));
+    //Eliminamos el confirm
+    document.getElementById("consentimiento").remove();
 }
+
+function rechazar() {
+    //Creamos la cookie de consentimiento
+    document.cookie = "consentimiento=false; expires=Thu, 18 Dec 2020 12:00:00 UTC; path=/";
+    console.log("Se ha creado la cookie de consentimiento" + document.cookie.indexOf("consentimiento=false"));
+    //LLamamos a la función que elimina el div y todo su contenido
+    remove(document.getElementById("consentimiento"));
+    
+}
+
 // Hacemos la llamada  para obtener el token de acceson y ponemos "Accept": "application/json","Access-Control-Allow-Origin": "*","Access-Control-Allow-Methods": "*"
 try {
     fetch(url, {

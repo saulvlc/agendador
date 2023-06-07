@@ -8,13 +8,14 @@
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/index.global.min.js'></script>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/index.global.min.js'></script>
     <script src="blocksdk.js"></script>
-    <script src="main.js"></script>
+    
+    <script src="mainSDK.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@100&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="estilo.css">
     <link rel="icon" type="image/x-icon" href="google_calendar_25497.ico">
-    <script src="https://cdn.c360a.salesforce.com/beacon/c360a/c52227c8-4fdf-4ed3-9cc5-a70e22bedf7a/scripts/c360a.min.js"></script>
+    <script src="//cdn.c360a.salesforce.com/beacon/c360a/c52227c8-4fdf-4ed3-9cc5-a70e22bedf7a/scripts/c360a.min.js"></script>
 <title>AgendarCitas</title>
 </head>
 <script>
@@ -28,6 +29,18 @@
 </script>
 
 <body>    
+    <div id="consentimiento" class="consentimiento">
+        <div class="consentimiento-content">
+            <h1>Consentimiento de datos personales</h1>
+            <p>Al aceptar el consentimiento de datos personales, usted acepta que sus datos personales sean almacenados en la plataforma de Salesforce, para que pueda ser contactado por un vendedor de la empresa.</p>
+            <div class="consentimiento-btn">
+                <button id="btn-aceptar" onclick="aceptar()">Aceptar</button>
+                <button id="btn-rechazar" onclick="rechazar()">Rechazar</button>
+            </div>
+        </div>
+    </div>
+
+
     <div class="seleccionable">
         <div class="titulo">
             <h1>Agendador de citas</h1>
